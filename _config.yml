@@ -121,6 +121,14 @@ url-pretty: "ojjy.github.io"  # eg. "deanattali.com/beautiful-jekyll"
 #  uri: "demo.wiki.pro"
 #  opt-out: true
 
+#pagination
+gems: [jekyll-paginate]
+paginate: 5
+paginate_path: "blog/page:num"
+
+
+
+
 # --- Comments --- #
 
 # Fill in your Disqus shortname (NOT the userid) if you want to support Disqus comments
@@ -162,7 +170,7 @@ timezone: "America/Knxoville"
 markdown: kramdown
 highlighter: rouge
 permalink: /:year-:month-:day-:title/
-paginate: 6
+paginate: 5
 
 kramdown:
   input: GFM
