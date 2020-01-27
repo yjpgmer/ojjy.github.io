@@ -21,6 +21,7 @@ Steps
 - Data Preparation
 Download data -> 
 heart.csv - 14 attributes, 303 patients data
+
 ```r
 # Library loading
 !pip install tensorflow-gpu==2.0.0-alpha0
@@ -80,10 +81,31 @@ data.column
        'exang', 'oldpeak', 'slope', 'ca', 'thal', 'target'],
       dtype='object')
 ```
+
 - Look up patients data
 Understanding and visualization of data
 ```r
-source_code
+# Check heart disease in 303 patients
+f = sns.countplot(x='target', data=data)
+f.set_title("Heart disease presence distribution")
+f.set_xticklabels(['No Heart disease', 'Heart Disease'])
+```
+
+```r
+# Check heart disease in 303 patients dividing female and male
+f = sns.countplot(x='target', data=data, hue='sex')
+plt.legend(['Female', 'Male'])
+f.set_title("Heart disease presence by gender")
+f.set_xticklabels(['No Heart disease', 'Heart Disease'])
+plt.xlabel("")
+```
+
+```r
+# Implementation interaction among feature using heatmap
+# The closer to +1, positive correlation
+# The closer to -1, negative correlation
+heat_map = sns.heatmap(data.corr(method='pearson'), annot=True, fmt='.2f', linewidths=2)
+heat_map.set_xticklabels(heat_map.get_xticklabels(), rotation=45)
 ```
 
 - Data preprocess
