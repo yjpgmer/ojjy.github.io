@@ -9,6 +9,7 @@ tags: [heart, disease]
 ## Prediction of heart disease
 Prediction heart disease based on TensorFlow2.0 DNN from patients data
 Needed analsis of interaction between complex data (Floowing example is simple plot)
+
 Steps
  1) Data preparation
  2) Look up patients data
