@@ -19,7 +19,7 @@ Steps
  
  
 - Data Preparation
-Download data -> 
+Download data -> https://www.kaggle.com/ronitf/heart-disease-uci
 heart.csv - 14 attributes, 303 patients data
 
 ```r
@@ -111,23 +111,151 @@ heat_map.set_xticklabels(heat_map.get_xticklabels(), rotation=45)
 - Data preprocess
 preprocess for modeling to numbers
 ```r
-source code
+# feater column is bridge between raw data and modeling data
+feature_columns = []
+
+# pass on Numeric col intactly
+for header in ['age', 'trestbps', 'chol', 'thalach', 'oldpeak', 'ca']:
+  feature_columns.append(tf.feature_column.numeric_column(header))
+
+# transform categorical type from numerical data from Bucketized column
+age = tf.feature_column.numeric_column("age")
+age_buckets = tf.feature_column.bucketized_column(age, boundaries=[18, 25, 30, 35, 40, 45, 50, 55, 60, 65])
+feature_columns.append(age_buckets)
+
+# mapping string values from categorical column
+data["thal"] = data["thal"].apply(str)
+thal = tf.feature_column.categorical_column_with_vocabulary_list(
+      'thal', ['3', '6', '7'])
+thal_one_hot = tf.feature_column.indicator_column(thal)
+feature_columns.append(thal_one_hot)
+
+data["sex"] = data["sex"].apply(str)
+sex = tf.feature_column.categorical_column_with_vocabulary_list(
+      'sex', ['0', '1'])
+sex_one_hot = tf.feature_column.indicator_column(sex)
+feature_columns.append(sex_one_hot)
+
+data["cp"] = data["cp"].apply(str)
+cp = tf.feature_column.categorical_column_with_vocabulary_list(
+      'cp', ['0', '1', '2', '3'])
+cp_one_hot = tf.feature_column.indicator_column(cp)
+feature_columns.append(cp_one_hot)
+
+data["slope"] = data["slope"].apply(str)
+slope = tf.feature_column.categorical_column_with_vocabulary_list(
+      'slope', ['0', '1', '2'])
+slope_one_hot = tf.feature_column.indicator_column(slope)
+feature_columns.append(slope_one_hot)
+
+
+# using Embedding column for multi values
+thal_embedding = tf.feature_column.embedding_column(thal, dimension=8)
+feature_columns.append(thal_embedding)
+
+# Crossed column - connection various features
+age_thal_crossed = tf.feature_column.crossed_column([age_buckets, thal], hash_bucket_size=1000)
+age_thal_crossed = tf.feature_column.indicator_column(age_thal_crossed)
+feature_columns.append(age_thal_crossed)
+
+cp_slope_crossed = tf.feature_column.crossed_column([cp, slope], hash_bucket_size=1000)
+cp_slope_crossed = tf.feature_column.indicator_column(cp_slope_crossed)
+```
+
+```r
+# Pandas dataframe - Tensorflow dataset
+def create_dataset(dataframe, batch_size=32):
+  dataframe = dataframe.copy()
+  labels = dataframe.pop('target')
+  return tf.data.Dataset.from_tensor_slices((dict(dataframe), labels)) \
+          .shuffle(buffer_size=len(dataframe)) \
+          .batch(batch_size)
+```
+
+```r
+seperating training set and test set from data
+train, test = train_test_split(data, test_size=0.2, random_state=RANDOM_SEED)
+train_ds = create_dataset(train)
+test_ds = create_dataset(test)
 ```
 
 - Generate Neural Network model
 ```r
-source code
+Disposition dropout layer among dense layers in order to reduce overfeating
+model = tf.keras.models.Sequential([
+  tf.keras.layers.DenseFeatures(feature_columns=feature_columns),
+  tf.keras.layers.Dense(units=128, activation='relu'),
+  tf.keras.layers.Dropout(rate=0.2),
+  tf.keras.layers.Dense(units=128, activation='relu'),
+  tf.keras.layers.Dense(units=1, activation='sigmoid')
+])
 ```
 
 - Model Training
 ```r
-source code
+# print precision and loss after compling model 
+model.compile(optimizer='adam',
+              loss='binary_crossentropy',
+              metrics=['accuracy'])
+
+history = model.fit(train_ds, validation_data=test_ds, epochs=100, use_multiprocessing=True)
+```
+
+```r
+# evaluate test set precision using model.evaludate function
+>model.evaluate(test_ds)
+2/2 [==============================] - 0s 23ms/step - loss: 0.3431 - accuracy: 0.8852
+[0.3430721387267113, 0.8852459]
+```
+
+```r
+# Visualization model precision
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.ylim((0, 1))
+plt.legend(['train', 'test'], loc='upper left')
+```
+
+```r
+# Visualization model loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
 ```
 
 - Prediction heart disease
 ```r
-source code
+from sklearn.metrics import classification_report, confusion_matrix
+predictions = model.predict(test_ds)
+bin_predictions = tf.round(predictions).numpy().flatten()
+print(classification_report(y_test.values, bin_predictions))
 ```
 
+```r
+# visualization result of confusion matrix
+class_names = [0,1]
+fig,ax = plt.subplots()
+tick_marks = np.arange(len(class_names))
+plt.xticks(tick_marks,class_names)
+plt.yticks(tick_marks,class_names)
+
+sns.heatmap(pd.DataFrame(cnf_matrix),annot=True,cmap="Blues",fmt="d",cbar=False)
+ax.xaxis.set_label_position('top')
+plt.tight_layout()
+plt.ylabel('Actual label')
+plt.xlabel('Predicted label')
+```
 
 # Reference
+https://towardsdatascience.com/heart-disease-prediction-in-tensorflow-2-tensorflow-for-hackers-part-ii-378eef0400ee
+https://colab.research.google.com/drive/13EThgYKSRwGBJJn_8iAvg-QWUWjCufB1
+https://www.kaggle.com/ronitf/heart-disease-uci
+https://www.tensorflow.org/tutorials/structured_data/feature_columns
+https://locslab.github.io/Tensorflow-feature-columns(1)/
