@@ -15,5 +15,5 @@ Welcome to my personal webpage
 -	Yejin Jo, Sang-Jae Nam, So-Hyang Ko, Shin-Dug Kim, "Design for Most Compatible Booting Model of Integrated Memory-Disk Based on ARM Linux.", The 9th International Conference on Embedded and Multimedia Computing (EMC2014), Aug 2014
 
 ## VOLUNTEERS
-Korea American Association of New Mexico (KAANM) - Developer of webpage and manager of backend server - Albuquerque, USA - Apr 2018 – Jan 2019
-Kenya Institute of Education (KIE) - Technical Teaching Assistant about C and Java - Nairobi, Kenya - Jul 2010 – Aug 2010
+- Korea American Association of New Mexico (KAANM) - Developer of webpage and manager of backend server - Albuquerque, USA - Apr 2018 – Jan 2019
+- Kenya Institute of Education (KIE) - Technical Teaching Assistant about C and Java - Nairobi, Kenya - Jul 2010 – Aug 2010
