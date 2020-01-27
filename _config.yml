@@ -28,6 +28,7 @@ navbar-links:
   Blog: "blog"
   Resources:
     - CV: "docu/Yejinjo_cv_v1_7.pdf"
+    - Papers: "docu/merged_papers.pdf"
 nav-search: "search"
 
 
