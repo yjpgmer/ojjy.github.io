@@ -21,7 +21,7 @@ comments: true
 3) Recognizing evolution by getting good solution and changing genes
 
 
-- Using various terms
+- Using various term
 
 
 *Generation, Population, Mutation, Crossover
