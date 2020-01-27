@@ -7,7 +7,7 @@ published: true
 
 
 ## OVERVIEW
-This is my personal webpage
+Welcome to my personal webpage
 
 ## PUBLICATIONS
 -	Yejin Jo, Chulsu Lim, “A Study on Management of Change of NTIS’ Information Confirmed by the Process of Survey and Analysis", The International Conference of Women Scientists and Engineers (BIEN2017), Sep 2017
