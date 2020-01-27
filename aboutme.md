@@ -9,4 +9,4 @@ My name is Yejin Jo. I have the following qualities:
 - Never give up
 - Always help your colleagues
 
-(img/aboutme/pic1_nairobi.JPG)
+![aboutme in 1680x1050 resolution](img/aboutme/pic1_nairobi.JPG)
