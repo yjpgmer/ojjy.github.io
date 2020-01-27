@@ -18,7 +18,7 @@ Steps
  6) Prediction Heart disease
  
  
-- Data Preparation
+# Data Preparation
 Download data -> https://www.kaggle.com/ronitf/heart-disease-uci
 heart.csv - 14 attributes, 303 patients data
 
@@ -82,7 +82,7 @@ data.column
       dtype='object')
 ```
 
-- Look up patients data
+# Look up patients data
 Understanding and visualization of data
 ```r
 # Check heart disease in 303 patients
@@ -108,7 +108,7 @@ heat_map = sns.heatmap(data.corr(method='pearson'), annot=True, fmt='.2f', linew
 heat_map.set_xticklabels(heat_map.get_xticklabels(), rotation=45)
 ```
 
-- Data preprocess
+# Data preprocess
 preprocess for modeling to numbers
 ```r
 # feater column is bridge between raw data and modeling data
@@ -179,7 +179,7 @@ train_ds = create_dataset(train)
 test_ds = create_dataset(test)
 ```
 
-- Generate Neural Network model
+# Generate Neural Network model
 ```r
 Disposition dropout layer among dense layers in order to reduce overfeating
 model = tf.keras.models.Sequential([
@@ -191,7 +191,7 @@ model = tf.keras.models.Sequential([
 ])
 ```
 
-- Model Training
+# Model Training
 ```r
 # print precision and loss after compling model 
 model.compile(optimizer='adam',
@@ -230,7 +230,7 @@ plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 ```
 
-- Prediction heart disease
+# Prediction heart disease
 ```r
 from sklearn.metrics import classification_report, confusion_matrix
 predictions = model.predict(test_ds)
